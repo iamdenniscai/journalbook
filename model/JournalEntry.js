@@ -1,3 +1,5 @@
+const log4js = require('log4js');
+
 class JournalEntry{
 	constructor(id, desc, debit, credit){
 		this.id = id;

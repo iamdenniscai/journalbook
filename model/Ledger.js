@@ -1,4 +1,7 @@
+const log4js = require('log4js');
+
 class Ledger{
+
 	constructor(){
 		this.assets = {};
 		this.assets.fixed = {};
