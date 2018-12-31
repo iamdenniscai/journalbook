@@ -15,6 +15,36 @@ class BookKeeper{
 		}
 	}
 
+	addCurrentAsset(name, curr, openBal, openDate){
+		var account = this.createAccount(name, curr, openBal, openDate);
+		this.ledger.assets.current[name] = account;
+	}
+
+	addCurrentLiability(name, curr, openBal, openDate){
+		var account = this.createAccount(name, curr, openBal, openDate);
+		this.ledger.liabilities.current[name] = account;
+	}
+
+	addExpense(name){
+		this.checkAccountExist(name);
+		this.ledger.expenses.push(name);
+	}
+
+	addGain(name){
+		this.checkAccountExist(name);
+		this.ledger.gains.push(name);
+	}
+
+	addIncome(name){
+		this.checkAccountExist(name);
+		this.ledger.income.push(name);
+	}
+
+	addLoss(name){
+		this.checkAccountExist(name);
+		this.ledger.losses.push(name);
+	}
+
 	checkAccountExist(name){
 		var accounts = Object.getOwnPropertyNames(this.ledger);
 		for(var i=0; i<accounts.length; i++){
@@ -42,8 +72,12 @@ class BookKeeper{
 		return false;
 	}
 
-	addAccount(name, curr, openBal, openDate){
-
+	createAccount(name, curr, openBal, openDate){
+		if(this.checkAccountExist(name)){
+			throw "Account name already exists"; 
+		}
+		var account = new Account(name, curr, openBal, openDate);
+		return account;
 	}
 }
 
