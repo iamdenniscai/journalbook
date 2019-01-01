@@ -18,58 +18,49 @@ class BookKeeper{
 	addCurrentAsset(name, curr, openBal, openDate){
 		var account = this.createAccount(name, curr, openBal, openDate);
 		this.ledger.assets.current[name] = account;
+		return account;
 	}
 
 	addCurrentLiability(name, curr, openBal, openDate){
 		var account = this.createAccount(name, curr, openBal, openDate);
 		this.ledger.liabilities.current[name] = account;
+		return account;
 	}
 
 	addExpense(name){
-		this.checkAccountExist(name);
+		if(this.checkAccountExist(name)){
+			throw "Account name already exists";
+		}
 		this.ledger.expenses.push(name);
+		return name;
 	}
 
 	addGain(name){
-		this.checkAccountExist(name);
+		if(this.checkAccountExist(name)){
+			throw "Account name already exists";
+		}
 		this.ledger.gains.push(name);
+		return name;
 	}
 
 	addIncome(name){
-		this.checkAccountExist(name);
+		if(this.checkAccountExist(name)){
+			throw "Account name already exists";
+		}
 		this.ledger.income.push(name);
+		return name;
 	}
 
 	addLoss(name){
-		this.checkAccountExist(name);
+		if(this.checkAccountExist(name)){
+			throw "Account name already exists";
+		}
 		this.ledger.losses.push(name);
+		return name;
 	}
 
 	checkAccountExist(name){
-		var accounts = Object.getOwnPropertyNames(this.ledger);
-		for(var i=0; i<accounts.length; i++){
-			if(accounts[i] == name){
-				return true;
-			}else{
-				if(typeof(this.ledger[accounts[i]]) === 'object'){
-					this.checkAccountExistRecursive(this.ledger[accounts[i]], name);
-				}
-			}
-		}
-		return false;
-	}
-
-	checkAccountExistRecursive(parent, name){
-		var children = Object.getOwnPropertyNames(parent);
-		for(var i=0; i<children.length; i++){
-			if(children[i] == name){
-				return true;
-			}
-			if(typeof(parent[children[i]]) === 'object'){
-				this.checkAccountExistRecursive(parent[children[i]], name);
-			}
-		}
-		return false;
+		return this.getAccount(name) != null ? true : false;
 	}
 
 	createAccount(name, curr, openBal, openDate){
@@ -78,6 +69,65 @@ class BookKeeper{
 		}
 		var account = new Account(name, curr, openBal, openDate);
 		return account;
+	}
+
+	editAccount(name, curr, openBal, openDate){
+		if(this.checkAccountExist(name) == false){
+			throw "Account name does not exist";
+		}
+
+	}
+
+	getAccount(name){
+		var category = this.ledger.assets.fixed;
+		for(var i=0; i<category.length; i++){
+			if(category[i].name == name){
+				return category[i];
+			}
+		}
+		category = this.ledger.assets.current;
+		for(var i=0; i<category.length; i++){
+			if(category[i].name == name){
+				return category[i];
+			}
+		}
+		category = this.ledger.liabilities.current;
+		for(var i=0; i<category.length; i++){
+			if(category[i].name == name){
+				return category[i];
+			}
+		}
+		category = this.ledger.liabilities.longterm;
+		for(var i=0; i<category.length; i++){
+			if(category[i].name == name){
+				return category[i];
+			}
+		}
+		category = this.ledger.income;
+		for(var i=0; i<category.length; i++){
+			if(category[i] == name){
+				return category[i];
+			}
+		}
+		category = this.ledger.expenses;
+		for(var i=0; i<category.length; i++){
+			if(category[i] == name){
+				return category[i];
+			}
+		}
+		category = this.ledger.gains;
+		for(var i=0; i<category.length; i++){
+			if(category[i] == name){
+				return category[i];
+			}
+		}
+		category = this.ledger.losses;
+		for(var i=0; i<category.length; i++){
+			if(category[i] == name){
+				return category[i];
+			}
+		}
+		return null;
 	}
 }
 

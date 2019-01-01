@@ -22,53 +22,103 @@ describe('BookKeeper', function(){
 		it('empty account should be ok', function(){
 			bookKeeper.checkAccountExist();
 		});
-		it('assets account should exist', function(){
-			assert.equal(bookKeeper.checkAccountExist('assets'), true);
-		});
 		it('%8asw account should not exist', function(){
 			assert.equal(bookKeeper.checkAccountExist('%8asw'), false);
 		});
 	});
 
 	describe('addCurrentAsset', function(){
-		it('should be ok', function(){
+		it('Cash SGD is added to Current Assets', function(){
 			bookKeeper.addCurrentAsset('Cash SGD', 'SGD', 0, new Date(2019,1,1));
+			var asset = bookKeeper.ledger.assets.current['Cash SGD'];
+			assert.equal(asset.curr, 'SGD');
 		});
 	});
 	
 	describe('addCurrentLiability', function(){
-		it('should be ok', function(){
+		it('Loan is added to Current Liability', function(){
 			bookKeeper.addCurrentLiability('Loan', 'SGD', 0, new Date(2019,1,1));
+			var liability = bookKeeper.ledger.liabilities.current.Loan;
+			assert.equal(liability.openBal, 0);
 		});
 	});
 
 	describe('addIncome', function(){
-		it('should be ok', function(){
+		it('Salary is added to income', function(){
 			bookKeeper.addIncome('Salary');
+			var found = false;
+			var income = bookKeeper.ledger.income;
+			for(var i=0; i<income.length; i++){
+				if(income[i] == 'Salary'){
+					found = true;
+				}
+			}
+			assert.equal(found, true);
 		});
 	});
 
 	describe('addExpense', function(){
-		it('should be ok', function(){
+		it('Food is added to expenses', function(){
 			bookKeeper.addExpense('Food');
+			var found = false;
+			var expenses = bookKeeper.ledger.expenses;
+			for(var i=0; i<expenses.length; i++){
+				if(expenses[i] == 'Food'){
+					found = true;
+				}
+			}
+			assert.equal(found, true);
 		});
-	});
 
-	describe('addExpense', function(){
-		it('should not go through', function(){
-			bookKeeper.addIncome('Food');
+		it('Salary cannot be added to expenses', function(){
+			try{
+				bookKeeper.addExpense('Salary');
+				var found = false;
+				var expenses = bookKeeper.ledger.expenses;
+				for(var i=0; i<expenses.length; i++){
+					if(expenses[i] == 'Food'){
+						found = true;
+					}
+				}
+				assert.equal(found, false);
+			}catch(e){
+				console.log(e);
+			}
 		});
 	});
 
 	describe('addGain', function(){
-		it('should be ok', function(){
+		it('Card Reward is added to gains', function(){
 			bookKeeper.addGain('Card Reward');
+			var found = false;
+			var gains = bookKeeper.ledger.gains;
+			for(var i=0; i<gains.length; i++){
+				if(gains[i] == 'Card Reward'){
+					found = true;
+				}
+			}
+			assert.equal(found, true);
 		});
 	});
 
 	describe('addLoss', function(){
-		it('should be ok', function(){
+		it('Unaccounted is added to losses', function(){
 			bookKeeper.addLoss('Unaccounted');
+			var found = false;
+			var losses = bookKeeper.ledger.losses;
+			for(var i=0; i<losses.length; i++){
+				if(losses[i] == 'Unaccounted'){
+					found = true;
+				}
+			}
+			assert.equal(found, true);
+		});
+	});
+
+	describe('getAccount', function(){
+		it('should be able to find Food', function(){
+			var acc = bookKeeper.getAccount('Food');
+			assert(acc != null);
 		});
 	});
 });
