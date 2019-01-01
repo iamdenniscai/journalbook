@@ -17,6 +17,12 @@ class BookKeeper{
 		}
 	}
 
+	addCreditCardAccount(name, curr, openBal, openDate, stmDate){
+		var account = this.createAccount(name, curr, openBal, openDate, stmDate);
+		this.ledger.liabilities.current[name] = account;
+		return account;
+	}
+
 	addCurrentAsset(name, curr, openBal, openDate){
 		var account = this.createAccount(name, curr, openBal, openDate);
 		this.ledger.assets.current[name] = account;
@@ -51,6 +57,15 @@ class BookKeeper{
 		}
 		this.ledger.income.push(name);
 		return name;
+	}
+
+	addJournal(desc, date, curr, amount, debitAcc, creditAcc){
+		var id = Object.getOwnPropertyNames(this.journalList).length + 1;
+		var debitEntry = new Entry(debitAcc, curr, amount);
+		var creditEntry = new Entry(creditAcc, curr, amount);
+		var journal = new JournalEntry(id, desc, date, debitEntry, creditEntry);
+		this.journalList[id] = journal;
+		return journal;
 	}
 
 	addLoss(name){

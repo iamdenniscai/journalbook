@@ -128,8 +128,22 @@ describe('BookKeeper', function(){
 
 	describe('editAccount', function(){
 		it('Loan is now USD', function(){
-			var acc = bookKeeper.editAccount('Loan', 'USD', 0, new Date(2019,1,1))
+			var acc = bookKeeper.editAccount('Loan', 'USD', 0, new Date(2019,1,1));
 			assert.equal(bookKeeper.ledger.liabilities.current.Loan.curr, 'USD');
+		});
+	});
+
+	describe('addCreditCardAccount', function(){
+		it('Citibank PremiereMiles is added to current liabilities', function(){
+			var acc = bookKeeper.addCreditCardAccount('Citibank PremiereMiles', 'SGD', 0, new Date(2019,1,1));
+			assert(bookKeeper.ledger.liabilities.current['Citibank PremiereMiles'] != null);
+		});
+	});
+
+	describe('addJournal', function(){
+		it('Journal is added', function(){
+			var journal = bookKeeper.addJournal('Lunch', new Date(2019,1,1), 'SGD', '80', 'Food', 'Cash SGD');
+			assert.equal(bookKeeper.journalList[journal.id].desc, 'Lunch');
 		});
 	});
 });
