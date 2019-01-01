@@ -116,9 +116,20 @@ describe('BookKeeper', function(){
 	});
 
 	describe('getAccount', function(){
-		it('should be able to find Food', function(){
+		it('should be able to find current asset', function(){
+			var acc = bookKeeper.getAccount('Cash SGD');
+			assert(acc != null);
+		});
+		it('should be able to find expense', function(){
 			var acc = bookKeeper.getAccount('Food');
 			assert(acc != null);
+		});
+	});
+
+	describe('editAccount', function(){
+		it('Loan is now USD', function(){
+			var acc = bookKeeper.editAccount('Loan', 'USD', 0, new Date(2019,1,1))
+			assert.equal(bookKeeper.ledger.liabilities.current.Loan.curr, 'USD');
 		});
 	});
 });

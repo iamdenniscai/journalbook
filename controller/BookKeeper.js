@@ -7,11 +7,13 @@ const Entry = require('../model/Entry.js');
 
 class BookKeeper{
 
-	constructor(ledger){
+	constructor(ledger, journalList){
 		if(ledger == null){
 			this.ledger = new Ledger();
+			this.journalList = {};
 		}else{
 			this.ledger = ledger;
+			this.journalList = journalList == null ? {} : journalList;
 		}
 	}
 
@@ -29,7 +31,7 @@ class BookKeeper{
 
 	addExpense(name){
 		if(this.checkAccountExist(name)){
-			throw "Account name already exists";
+			throw "Account name " + name + " already exists";
 		}
 		this.ledger.expenses.push(name);
 		return name;
@@ -37,7 +39,7 @@ class BookKeeper{
 
 	addGain(name){
 		if(this.checkAccountExist(name)){
-			throw "Account name already exists";
+			throw "Account name " + name + " already exists";
 		}
 		this.ledger.gains.push(name);
 		return name;
@@ -45,7 +47,7 @@ class BookKeeper{
 
 	addIncome(name){
 		if(this.checkAccountExist(name)){
-			throw "Account name already exists";
+			throw "Account name " + name + " already exists";
 		}
 		this.ledger.income.push(name);
 		return name;
@@ -53,7 +55,7 @@ class BookKeeper{
 
 	addLoss(name){
 		if(this.checkAccountExist(name)){
-			throw "Account name already exists";
+			throw "Account name " + name + " already exists";
 		}
 		this.ledger.losses.push(name);
 		return name;
@@ -65,42 +67,50 @@ class BookKeeper{
 
 	createAccount(name, curr, openBal, openDate){
 		if(this.checkAccountExist(name)){
-			throw "Account name already exists"; 
+			throw "Account name: " + name + " already exists"; 
 		}
 		var account = new Account(name, curr, openBal, openDate);
 		return account;
 	}
 
 	editAccount(name, curr, openBal, openDate){
-		if(this.checkAccountExist(name) == false){
-			throw "Account name does not exist";
+		var acc = this.getAccount(name);
+		if(acc == null){
+			throw "Account name " + name + " does not exist";
 		}
-
+		acc.curr = curr;
+		acc.openBal = openBal;
+		acc.openDate = openDate;
+		return acc;
 	}
 
 	getAccount(name){
-		var category = this.ledger.assets.fixed;
+		var acc = this.ledger.assets.fixed;
+		var category = Object.getOwnPropertyNames(acc);
 		for(var i=0; i<category.length; i++){
-			if(category[i].name == name){
-				return category[i];
+			if(category[i] == name){
+				return acc[category[i]];
 			}
 		}
-		category = this.ledger.assets.current;
+		acc = this.ledger.assets.current;
+		category = Object.getOwnPropertyNames(acc);
 		for(var i=0; i<category.length; i++){
-			if(category[i].name == name){
-				return category[i];
+			if(category[i] == name){
+				return acc[category[i]];
 			}
 		}
-		category = this.ledger.liabilities.current;
+		acc = this.ledger.liabilities.current;
+		category = Object.getOwnPropertyNames(acc);
 		for(var i=0; i<category.length; i++){
-			if(category[i].name == name){
-				return category[i];
+			if(category[i] == name){
+				return acc[category[i]];
 			}
 		}
-		category = this.ledger.liabilities.longterm;
+		acc = this.ledger.liabilities.longterm;
+		category = Object.getOwnPropertyNames(acc);
 		for(var i=0; i<category.length; i++){
-			if(category[i].name == name){
-				return category[i];
+			if(category[i] == name){
+				return acc[category[i]];
 			}
 		}
 		category = this.ledger.income;
