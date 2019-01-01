@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^6.2.0",
+    "extend": "^3.0.2",
     "log4js": "^3.0.6"
   }
 }

@@ -4,6 +4,7 @@ const assert = require('assert');
 const log4js = require('log4js');
 
 const BookKeeper = require('../controller/BookKeeper.js');
+const Account = require('../model/Account.js');
 
 var logger;
 
@@ -128,7 +129,7 @@ describe('BookKeeper', function(){
 
 	describe('editAccount', function(){
 		it('Loan is now USD', function(){
-			var acc = bookKeeper.editAccount('Loan', 'USD', 0, new Date(2019,1,1));
+			var acc = bookKeeper.editAccount(new Account('Loan', 'USD', 0, new Date(2019,1,1)));
 			assert.equal(bookKeeper.ledger.liabilities.current.Loan.curr, 'USD');
 		});
 	});

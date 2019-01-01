@@ -1,4 +1,5 @@
 const log4js = require('log4js');
+const extend = require('extend');
 
 const Ledger = require('../model/Ledger.js');
 const Account = require('../model/Account.js');
@@ -88,14 +89,12 @@ class BookKeeper{
 		return account;
 	}
 
-	editAccount(name, curr, openBal, openDate){
-		var acc = this.getAccount(name);
+	editAccount(account){
+		var acc = this.getAccount(account.name);
 		if(acc == null){
-			throw "Account name " + name + " does not exist";
+			throw "Account name " + account.name + " does not exist";
 		}
-		acc.curr = curr;
-		acc.openBal = openBal;
-		acc.openDate = openDate;
+		extend(acc, account);
 		return acc;
 	}
 
