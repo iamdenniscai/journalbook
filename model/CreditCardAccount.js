@@ -10,4 +10,4 @@ class CreditCardAccount{
 	}
 }
 
-module.exports = Account;
+module.exports = CreditCardAccount;

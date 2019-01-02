@@ -5,6 +5,7 @@ const log4js = require('log4js');
 
 const BookKeeper = require('../controller/BookKeeper.js');
 const Account = require('../model/Account.js');
+const CreditCardAccount = require('../model/CreditCardAccount.js');
 
 var logger;
 
@@ -136,8 +137,15 @@ describe('BookKeeper', function(){
 
 	describe('addCreditCardAccount', function(){
 		it('Citibank PremiereMiles is added to current liabilities', function(){
-			var acc = bookKeeper.addCreditCardAccount('Citibank PremiereMiles', 'SGD', 0, new Date(2019,1,1));
+			var acc = bookKeeper.addCreditCardAccount('Citibank PremiereMiles', 'SGD', 0, new Date(2019,1,1), 12);
 			assert(bookKeeper.ledger.liabilities.current['Citibank PremiereMiles'] != null);
+		});
+	});
+
+	describe('editCreditCardAccount', function(){
+		it('Citibank PremiereMiles has statement date on the 15th', function(){
+			var acc = bookKeeper.editAccount(new CreditCardAccount('Citibank PremiereMiles', 'SGD', 0, new Date(2019,1,1), 15));
+			assert.equal(bookKeeper.ledger.liabilities.current['Citibank PremiereMiles'].stmDate, 15);
 		});
 	});
 
