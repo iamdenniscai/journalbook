@@ -98,6 +98,10 @@ class BookKeeper{
 		return acc;
 	}
 
+	editJournal(journal){
+
+	}
+
 	getAccount(name){
 		var acc = this.ledger.assets.fixed;
 		var category = Object.getOwnPropertyNames(acc);
@@ -150,6 +154,13 @@ class BookKeeper{
 			if(category[i] == name){
 				return category[i];
 			}
+		}
+		return null;
+	}
+
+	getJournal(id){
+		if(this.journalList[id] != null){
+			return this.journalList[id];
 		}
 		return null;
 	}

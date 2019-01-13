@@ -150,9 +150,20 @@ describe('BookKeeper', function(){
 	});
 
 	describe('addJournal', function(){
-		it('Journal is added', function(){
+		it('Lunch Journal is added', function(){
 			var journal = bookKeeper.addJournal('Lunch', new Date(2019,1,1), 'SGD', '80', 'Food', 'Cash SGD');
 			assert.equal(bookKeeper.journalList[journal.id].desc, 'Lunch');
+		});
+		it('Dinner Journal is added', function(){
+			var journal = bookKeeper.addJournal('Dinner', new Date(2019,1,1), 'SGD', '80', 'Food', 'Cash SGD');
+			assert.equal(bookKeeper.journalList[journal.id].desc, 'Dinner');
+		});
+	});
+
+	describe('getJournal', function(){
+		it('Journal is added', function(){
+			var journal = bookKeeper.getJournal(2);
+			assert.equal(journal.desc, 'Dinner');
 		});
 	});
 });
